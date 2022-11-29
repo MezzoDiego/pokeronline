@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
+import net.bytebuddy.asm.Advice.This;
 
 public class TavoloDTO {
 
@@ -126,6 +127,9 @@ public class TavoloDTO {
 
 		if (includeUtente)
 		result.setUtenteCreazione(UtenteDTO.buildUtenteDTOFromModel(tavoloModel.getUtenteCreazione()));
+		
+		if(tavoloModel.getUtenti().size() > 0)
+			result.setUtenti(tavoloModel.getUtenti());
 		
 		return result;
 	}
