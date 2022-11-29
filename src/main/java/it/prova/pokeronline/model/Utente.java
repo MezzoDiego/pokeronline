@@ -85,6 +85,21 @@ public class Utente {
 		this.email = email;
 		this.stato = stato;
 	}
+	
+	public Utente(Long id, String username, String password, String nome, String cognome, String email,
+			 Integer esperienzaAccumulata, Integer creditoAccumulato, LocalDate dateCreated,StatoUtente stato) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email = email;
+		this.esperienzaAccumulata = esperienzaAccumulata;
+		this.creditoAccumulato = creditoAccumulato;
+		this.dateCreated = dateCreated;
+		this.stato = stato;
+	}
 
 	public Long getId() {
 		return id;
