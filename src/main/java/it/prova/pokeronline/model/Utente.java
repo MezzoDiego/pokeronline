@@ -97,6 +97,15 @@ public class Utente {
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 	}
+	
+	public Utente(Long id, String username, String nome, String cognome, String email) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email = email;
+	}
 
 	public Long getId() {
 		return id;

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import it.prova.pokeronline.model.StatoUtente;
 import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.utente.UtenteRepository;
+import it.prova.pokeronline.web.api.exceptions.NotFoundException;
 
 
 @Service
@@ -27,8 +28,7 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Override
 	public List<Utente> listAllUtenti() {
-		// TODO Auto-generated method stub
-		return null;
+		return (List<Utente>) repository.findAll();
 	}
 
 	@Override
@@ -38,26 +38,32 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Override
 	public Utente caricaSingoloUtenteConRuoli(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByIdConRuoli(id).orElse(null);
 	}
 
 	@Override
 	@Transactional
-	public void aggiorna(Utente utenteInstance) {
-		// TODO Auto-generated method stub
-		
+	public Utente aggiorna(Utente utenteInstance) {
+		Utente utenteReloaded = repository.findById(utenteInstance.getId()).orElse(null);
+		if (utenteReloaded == null)
+			throw new NotFoundException("Elemento non trovato");
+		utenteReloaded.setNome(utenteInstance.getNome());
+		utenteReloaded.setCognome(utenteInstance.getCognome());
+		utenteReloaded.setEmail(utenteInstance.getEmail());
+		utenteReloaded.setRuoli(utenteInstance.getRuoli());
+		utenteReloaded.setUsername(utenteInstance.getUsername());
+		return repository.save(utenteReloaded);	
 	}
 
 	@Override
 	@Transactional
-	public void inserisciNuovo(Utente utenteInstance) {
+	public Utente inserisciNuovo(Utente utenteInstance) {
 		utenteInstance.setStato(StatoUtente.CREATO);
 		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword()));
 		utenteInstance.setDateCreated(LocalDate.now());
 		utenteInstance.setCreditoAccumulato(0);
 		utenteInstance.setEsperienzaAccumulata(0);
-		repository.save(utenteInstance);
+		return repository.save(utenteInstance);
 		
 	}
 
@@ -91,7 +97,7 @@ public class UtenteServiceImpl implements UtenteService {
 	public void changeUserAbilitation(Long utenteInstanceId) {
 		Utente utenteInstance = caricaSingoloUtente(utenteInstanceId);
 		if (utenteInstance == null)
-			throw new RuntimeException("Elemento non trovato.");
+			throw new NotFoundException("Elemento non trovato.");
 
 		if (utenteInstance.getStato() == null || utenteInstance.getStato().equals(StatoUtente.CREATO))
 			utenteInstance.setStato(StatoUtente.ATTIVO);
