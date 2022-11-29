@@ -9,10 +9,14 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
 import net.bytebuddy.asm.Advice.This;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TavoloDTO {
 
 	private Long id;
@@ -28,8 +32,10 @@ public class TavoloDTO {
 
 	private LocalDate dataCreazione;
 	
+	@JsonIgnoreProperties(value = { "tavolo" })
 	private Set<Utente> utenti = new HashSet<Utente>(0);
 	
+	@JsonIgnoreProperties(value = { "tavolo" })
 	private UtenteDTO utenteCreazione;
 
 	public TavoloDTO() {

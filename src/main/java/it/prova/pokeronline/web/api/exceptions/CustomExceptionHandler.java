@@ -58,5 +58,29 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(TavoloConGiocatoriException.class)
+	public ResponseEntity<Object> handleTavoloConGiocatoriException(TavoloConGiocatoriException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.NOT_ACCEPTABLE);
+
+		return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler(NotYourTavoloException.class)
+	public ResponseEntity<Object> handleNotYourTavoloException(NotYourTavoloException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.FORBIDDEN);
+
+		return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+	}
 
 }
