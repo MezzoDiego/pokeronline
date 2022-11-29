@@ -51,8 +51,6 @@ public class UtenteDTO {
 
 	private Long[] ruoliIds;
 	
-	private Set<Tavolo> tavoliCreati = new HashSet<>();
-	
 	private Tavolo tavolo;
 
 	public UtenteDTO() {
@@ -163,14 +161,6 @@ public class UtenteDTO {
 		this.creditoAccumulato = creditoAccumulato;
 	}
 	
-	public Set<Tavolo> getTavoliCreati() {
-		return tavoliCreati;
-	}
-
-	public void setTavoliCreati(Set<Tavolo> tavoliCreati) {
-		this.tavoliCreati = tavoliCreati;
-	}
-
 	public Tavolo getTavolo() {
 		return tavolo;
 	}
@@ -185,8 +175,6 @@ public class UtenteDTO {
 		if (includeIdRoles && ruoliIds != null)
 			result.setRuoli(Arrays.asList(ruoliIds).stream().map(id -> new Ruolo(id)).collect(Collectors.toSet()));
 		
-		if(this.tavoliCreati.size() > 0)
-			result.setTavoliCreati(tavoliCreati);
 		if(this.tavolo != null)
 			result.setTavolo(tavolo);
 
