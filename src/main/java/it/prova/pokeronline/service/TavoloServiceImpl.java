@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.repository.tavolo.TavoloRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class TavoloServiceImpl implements TavoloService{
 
 	@Autowired
@@ -33,18 +35,21 @@ public class TavoloServiceImpl implements TavoloService{
 	}
 
 	@Override
+	@Transactional
 	public Tavolo aggiorna(Tavolo tavoloInstance) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	@Transactional
 	public Tavolo inserisciNuovo(Tavolo tavoloInstance) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	@Transactional
 	public void rimuovi(Long idToRemove) {
 		// TODO Auto-generated method stub
 		

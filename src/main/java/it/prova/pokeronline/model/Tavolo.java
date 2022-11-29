@@ -37,7 +37,7 @@ public class Tavolo {
 	private LocalDate dataCreazione;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tavolo")
-	private Set<Utente> utenti = new HashSet<Utente>(0);
+	private Set<Utente> utenti = new HashSet<>(0);
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "utente_id", nullable = false)

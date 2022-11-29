@@ -1,5 +1,7 @@
 package it.prova.pokeronline.service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.prova.pokeronline.model.StatoUtente;
 import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.utente.UtenteRepository;
 
@@ -20,6 +23,7 @@ public class UtenteServiceImpl implements UtenteService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
 
 	@Override
 	public List<Utente> listAllUtenti() {
@@ -29,8 +33,7 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Override
 	public Utente caricaSingoloUtente(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -40,18 +43,26 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	@Override
+	@Transactional
 	public void aggiorna(Utente utenteInstance) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	@Transactional
 	public void inserisciNuovo(Utente utenteInstance) {
-		// TODO Auto-generated method stub
+		utenteInstance.setStato(StatoUtente.CREATO);
+		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword()));
+		utenteInstance.setDateCreated(LocalDate.now());
+		utenteInstance.setCreditoAccumulato(0);
+		utenteInstance.setEsperienzaAccumulata(0);
+		repository.save(utenteInstance);
 		
 	}
 
 	@Override
+	@Transactional
 	public void rimuovi(Long idToRemove) {
 		// TODO Auto-generated method stub
 		
@@ -76,15 +87,24 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	@Override
+	@Transactional
 	public void changeUserAbilitation(Long utenteInstanceId) {
-		// TODO Auto-generated method stub
+		Utente utenteInstance = caricaSingoloUtente(utenteInstanceId);
+		if (utenteInstance == null)
+			throw new RuntimeException("Elemento non trovato.");
+
+		if (utenteInstance.getStato() == null || utenteInstance.getStato().equals(StatoUtente.CREATO))
+			utenteInstance.setStato(StatoUtente.ATTIVO);
+		else if (utenteInstance.getStato().equals(StatoUtente.ATTIVO))
+			utenteInstance.setStato(StatoUtente.DISABILITATO);
+		else if (utenteInstance.getStato().equals(StatoUtente.DISABILITATO))
+			utenteInstance.setStato(StatoUtente.ATTIVO);
 		
 	}
 
 	@Override
 	public Utente findByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByUsername(username).orElse(null);
 	}
 
 	

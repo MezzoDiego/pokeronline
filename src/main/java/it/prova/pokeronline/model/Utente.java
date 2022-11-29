@@ -59,7 +59,7 @@ public class Utente {
 	@JoinColumn(name = "tavolo_id")
 	private Tavolo tavolo;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utente")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utenteCreazione")
 	private Set<Tavolo> tavoliCreati = new HashSet<Tavolo>(0);
 
 	public Utente() {
