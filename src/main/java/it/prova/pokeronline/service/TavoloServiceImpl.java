@@ -1,5 +1,6 @@
 package it.prova.pokeronline.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.tavolo.TavoloRepository;
 import it.prova.pokeronline.repository.utente.UtenteRepository;
+import it.prova.pokeronline.web.api.exceptions.InsufficientFundException;
 import it.prova.pokeronline.web.api.exceptions.NotFoundException;
 import it.prova.pokeronline.web.api.exceptions.NotYourTavoloException;
+import it.prova.pokeronline.web.api.exceptions.PlayerBusyToAnotherTableException;
 
 @Service
 @Transactional(readOnly = true)
@@ -98,6 +101,7 @@ public class TavoloServiceImpl implements TavoloService {
 			throw new NotFoundException("Utente non trovato.");
 
 		tavoloInstance.setUtenteCreazione(utenteInSessione);
+		tavoloInstance.setDataCreazione(LocalDate.now());
 		return repository.save(tavoloInstance);
 	}
 
@@ -159,15 +163,55 @@ public class TavoloServiceImpl implements TavoloService {
 		if (utenteInSessione == null)
 			throw new NotFoundException("Utente non trovato.");
 		
-		double segno = Math.random();
-		int somma=(int)Math.random()*1000;
-		int totDaAggiungereOSottrarre = (int) (segno*somma);
+		List<Tavolo> tavoliDB = (List<Tavolo>)repository.findAll();
 		
-		utenteInSessione.setTavolo(tavoloReloaded);
-		utenteInSessione.setCreditoAccumulato(utenteInSessione.getCreditoAccumulato() + totDaAggiungereOSottrarre);
+		for(Tavolo tavoloItem : tavoliDB) {
+			for(Utente giocatoreItem : tavoloItem.getUtenti()) {
+				if(giocatoreItem.getId().equals(utenteInSessione.getId()))
+					throw new PlayerBusyToAnotherTableException("Impossibile giocare perche' sei gia' impegnato presso un altro tavolo.");
+			}
+		}
+		
+		double randomNumber = Math.random()*1000;
+		int totDaAggiungereOSottrarre = (int) randomNumber;
+		
+		Integer creditoAggiornato = utenteInSessione.getCreditoAccumulato() + totDaAggiungereOSottrarre;
+		
+		if(creditoAggiornato < 0)
+			throw new InsufficientFundException("Credito Insufficiente.");
+		
+		utenteInSessione.setCreditoAccumulato(creditoAggiornato);
 		utenteRepository.save(utenteInSessione);
 		tavoloReloaded.getUtenti().add(utenteInSessione);
 		repository.save(tavoloReloaded);
+		
+	}
+
+	@Override
+	@Transactional
+	public void leave(Long id, String username) {
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new NotFoundException("Utente non trovato.");
+		
+		Tavolo tavoloReloaded = repository.findById(id).orElse(null);
+		if (tavoloReloaded == null)
+			throw new NotFoundException("Tavolo non trovato.");
+		
+		for(Utente item : tavoloReloaded.getUtenti()) {
+			if(item.getId().equals(utenteInSessione.getId())) {
+				
+				utenteInSessione.setEsperienzaAccumulata(utenteInSessione.getEsperienzaAccumulata()+1);
+				utenteRepository.save(utenteInSessione);
+				
+				tavoloReloaded.getUtenti().remove(utenteInSessione);
+				repository.save(tavoloReloaded);
+			}
+				
+		}
+		
+			
+		
 		
 	}
 

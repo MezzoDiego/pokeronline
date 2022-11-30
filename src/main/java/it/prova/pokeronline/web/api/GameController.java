@@ -49,4 +49,9 @@ public class GameController {
 		tavoloService.play(idTavolo, principal.getName());
 	}
 	
+	@GetMapping("/leave/{id}")
+	public void leave(@PathVariable(value= "id",required = true) long idTavolo, Principal principal) {
+		tavoloService.leave(idTavolo, principal.getName());
+	}
+	
 }

@@ -54,9 +54,6 @@ public class UtenteDTO {
 
 	private Long[] ruoliIds;
 	
-	@JsonIgnoreProperties(value = { "utenteCreazione" })
-	private Tavolo tavolo;
-
 	public UtenteDTO() {
 	}
 
@@ -179,22 +176,11 @@ public class UtenteDTO {
 		this.creditoAccumulato = creditoAccumulato;
 	}
 
-	public Tavolo getTavolo() {
-		return tavolo;
-	}
-
-	public void setTavolo(Tavolo tavolo) {
-		this.tavolo = tavolo;
-	}
-
 	public Utente buildUtenteModel(boolean includeRoles) {
 		Utente result = new Utente(this.id, this.username, this.password, this.nome, this.cognome, this.email,
 				this.esperienzaAccumulata, this.creditoAccumulato, this.dateCreated, this.stato);
 		if (includeRoles && ruoliIds != null)
 			result.setRuoli(Arrays.asList(ruoliIds).stream().map(id -> new Ruolo(id)).collect(Collectors.toSet()));
-
-		if (this.tavolo != null)
-			result.setTavolo(tavolo);
 
 		return result;
 	}

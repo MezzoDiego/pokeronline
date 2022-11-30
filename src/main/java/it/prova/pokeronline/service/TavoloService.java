@@ -23,6 +23,8 @@ public interface TavoloService {
 	public List<Tavolo> findAllTavoliPlayable(String username);
 	
 	public void play(Long id, String username);
+	
+	public void leave(Long id, String username);
 
 	
 }
