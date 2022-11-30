@@ -32,10 +32,8 @@ public class TavoloDTO {
 
 	private LocalDate dataCreazione;
 	
-	@JsonIgnoreProperties(value = { "tavolo" })
 	private Set<Utente> utenti = new HashSet<Utente>(0);
 	
-	@JsonIgnoreProperties(value = { "tavolo" })
 	private UtenteDTO utenteCreazione;
 
 	public TavoloDTO() {

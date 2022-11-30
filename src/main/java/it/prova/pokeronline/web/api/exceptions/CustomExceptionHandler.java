@@ -118,5 +118,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
 	}
+	
+	@ExceptionHandler(NotEnoughExperienceException.class)
+	public ResponseEntity<Object> handleNotEnoughExperienceException(NotEnoughExperienceException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.FORBIDDEN);
+
+		return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+	}
 
 }

@@ -12,9 +12,11 @@ import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.tavolo.TavoloRepository;
 import it.prova.pokeronline.repository.utente.UtenteRepository;
 import it.prova.pokeronline.web.api.exceptions.InsufficientFundException;
+import it.prova.pokeronline.web.api.exceptions.NotEnoughExperienceException;
 import it.prova.pokeronline.web.api.exceptions.NotFoundException;
 import it.prova.pokeronline.web.api.exceptions.NotYourTavoloException;
 import it.prova.pokeronline.web.api.exceptions.PlayerBusyToAnotherTableException;
+import it.prova.pokeronline.web.api.exceptions.TavoloConGiocatoriException;
 
 @Service
 @Transactional(readOnly = true)
@@ -115,6 +117,9 @@ public class TavoloServiceImpl implements TavoloService {
 		Tavolo tavoloReloaded = repository.findById(idToRemove).orElse(null);
 		if (tavoloReloaded == null)
 			throw new NotFoundException("Tavolo non trovato.");
+		
+		if(tavoloReloaded.getUtenti().size() > 0)
+			throw new TavoloConGiocatoriException("Impossibile eliminare tavolo, ci stanno giocando dei players.");
 
 		if (utenteInSessione.isAdmin() && tavoloReloaded.getUtenti().size() < 1)
 			repository.deleteById(idToRemove);
@@ -133,14 +138,14 @@ public class TavoloServiceImpl implements TavoloService {
 		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
 		if (utenteInSessione == null)
 			throw new NotFoundException("Utente non trovato.");
-		
-		if(utenteInSessione.isAdmin())
+
+		if (utenteInSessione.isAdmin())
 			return repository.findByExample(example);
-		
-		if(utenteInSessione.isSpecialPlayer())
+
+		if (utenteInSessione.isSpecialPlayer())
 			example.setUtenteCreazione(utenteInSessione);
-			return repository.findByExampleEager(example);
-		
+		return repository.findByExampleEager(example);
+
 	}
 
 	@Override
@@ -148,7 +153,7 @@ public class TavoloServiceImpl implements TavoloService {
 		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
 		if (utenteInSessione == null)
 			throw new NotFoundException("Utente non trovato.");
-		
+
 		return repository.findAllTavoliPlayable(utenteInSessione.getEsperienzaAccumulata());
 	}
 
@@ -158,33 +163,43 @@ public class TavoloServiceImpl implements TavoloService {
 		Tavolo tavoloReloaded = repository.findById(id).orElse(null);
 		if (tavoloReloaded == null)
 			throw new NotFoundException("Tavolo non trovato.");
-		
+
 		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
 		if (utenteInSessione == null)
 			throw new NotFoundException("Utente non trovato.");
-		
-		List<Tavolo> tavoliDB = (List<Tavolo>)repository.findAll();
-		
-		for(Tavolo tavoloItem : tavoliDB) {
-			for(Utente giocatoreItem : tavoloItem.getUtenti()) {
-				if(giocatoreItem.getId().equals(utenteInSessione.getId()))
-					throw new PlayerBusyToAnotherTableException("Impossibile giocare perche' sei gia' impegnato presso un altro tavolo.");
+
+		if (utenteInSessione.getEsperienzaAccumulata() < tavoloReloaded.getEsperienzaMinima())
+			throw new NotEnoughExperienceException("Impossibile giocare al tavolo selezionato, serve piu'esperienza!");
+
+		if (utenteInSessione.getCreditoAccumulato() < tavoloReloaded.getCifraMinima())
+			throw new InsufficientFundException("Impossibile giocare al tavolo selezionato, credito insufficiente!");
+
+		List<Tavolo> tavoliDB = (List<Tavolo>) repository.findAll();
+
+		for (Tavolo tavoloItem : tavoliDB) {
+			for (Utente giocatoreItem : tavoloItem.getUtenti()) {
+				if (giocatoreItem.getId().equals(utenteInSessione.getId()))
+					throw new PlayerBusyToAnotherTableException(
+							"Impossibile giocare perche' sei gia' impegnato presso un altro tavolo.");
 			}
 		}
-		
-		double randomNumber = Math.random()*1000;
+
+		double randomNumber = Math.random() * 1000;
 		int totDaAggiungereOSottrarre = (int) randomNumber;
-		
+
 		Integer creditoAggiornato = utenteInSessione.getCreditoAccumulato() + totDaAggiungereOSottrarre;
-		
-		if(creditoAggiornato < 0)
-			throw new InsufficientFundException("Credito Insufficiente.");
-		
+
+		if (creditoAggiornato < 0) {
+			utenteInSessione.setCreditoAccumulato(0);
+		utenteRepository.save(utenteInSessione);
+		throw new InsufficientFundException("Credito Esaurito.");
+		}
+
 		utenteInSessione.setCreditoAccumulato(creditoAggiornato);
 		utenteRepository.save(utenteInSessione);
 		tavoloReloaded.getUtenti().add(utenteInSessione);
 		repository.save(tavoloReloaded);
-		
+
 	}
 
 	@Override
@@ -193,26 +208,40 @@ public class TavoloServiceImpl implements TavoloService {
 		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
 		if (utenteInSessione == null)
 			throw new NotFoundException("Utente non trovato.");
-		
+
 		Tavolo tavoloReloaded = repository.findById(id).orElse(null);
 		if (tavoloReloaded == null)
 			throw new NotFoundException("Tavolo non trovato.");
-		
-		for(Utente item : tavoloReloaded.getUtenti()) {
-			if(item.getId().equals(utenteInSessione.getId())) {
-				
-				utenteInSessione.setEsperienzaAccumulata(utenteInSessione.getEsperienzaAccumulata()+1);
+
+		for (Utente item : tavoloReloaded.getUtenti()) {
+			if (item.getId().equals(utenteInSessione.getId())) {
+
+				utenteInSessione.setEsperienzaAccumulata(utenteInSessione.getEsperienzaAccumulata() + 1);
 				utenteRepository.save(utenteInSessione);
-				
+
 				tavoloReloaded.getUtenti().remove(utenteInSessione);
 				repository.save(tavoloReloaded);
 			}
-				
+
 		}
+
+	}
+
+	@Override
+	public Tavolo lastGame(String username) {
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new NotFoundException("Utente non trovato.");
 		
-			
-		
-		
+		List<Tavolo> tavoliDB = (List<Tavolo>) repository.findAll();
+
+		for (Tavolo tavoloItem : tavoliDB) {
+			for (Utente giocatoreItem : tavoloItem.getUtenti()) {
+				if (giocatoreItem.getId().equals(utenteInSessione.getId()))
+					return tavoloItem;
+			}
+		}
+		return new Tavolo();
 	}
 
 }

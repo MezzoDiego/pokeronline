@@ -25,6 +25,8 @@ public interface TavoloService {
 	public void play(Long id, String username);
 	
 	public void leave(Long id, String username);
+	
+	public Tavolo lastGame(String username);
 
 	
 }

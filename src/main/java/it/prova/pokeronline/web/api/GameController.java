@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.prova.pokeronline.dto.TavoloDTO;
+import it.prova.pokeronline.dto.TavoloDTOForLastGame;
 import it.prova.pokeronline.dto.UtenteDTO;
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.service.TavoloService;
@@ -52,6 +53,11 @@ public class GameController {
 	@GetMapping("/leave/{id}")
 	public void leave(@PathVariable(value= "id",required = true) long idTavolo, Principal principal) {
 		tavoloService.leave(idTavolo, principal.getName());
+	}
+	
+	@GetMapping("/lastGame")
+	public TavoloDTOForLastGame lastGame( Principal principal) {
+		return TavoloDTOForLastGame.buildTavoloDTOFromModel(tavoloService.lastGame(principal.getName()));
 	}
 	
 }
