@@ -13,6 +13,7 @@ import it.prova.pokeronline.model.StatoUtente;
 import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.utente.UtenteRepository;
 import it.prova.pokeronline.web.api.exceptions.NotFoundException;
+import it.prova.pokeronline.web.api.exceptions.NullException;
 
 
 @Service
@@ -111,6 +112,23 @@ public class UtenteServiceImpl implements UtenteService {
 	@Override
 	public Utente findByUsername(String username) {
 		return repository.findByUsername(username).orElse(null);
+	}
+
+	@Override
+	@Transactional
+	public void addCredito(Integer moneyToAdd, String username) {
+		Utente utenteInSessione = repository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new NotFoundException("Utente non trovato.");
+		
+		if(moneyToAdd == null)
+			throw new NullException("Il valore da aggiungere al credito non puo' essere null.");
+		
+		Integer creditoAumentato = utenteInSessione.getCreditoAccumulato() + moneyToAdd;
+		
+		utenteInSessione.setCreditoAccumulato(creditoAumentato);
+		 repository.save(utenteInSessione);
+		
 	}
 
 	
