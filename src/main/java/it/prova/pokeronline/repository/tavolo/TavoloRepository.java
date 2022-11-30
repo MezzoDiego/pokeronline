@@ -17,4 +17,7 @@ public interface TavoloRepository extends CrudRepository<Tavolo, Long>, CustomTa
 	@Query("select t from Tavolo t left join fetch t.utenti us where t.id = ?1")
 	Tavolo findSingleTavoloEagerAdmin(Long idTavolo);
 	
+	@Query("from Tavolo t where t.esperienzaMinima <= ?1")
+	List<Tavolo> findAllTavoliPlayable(Integer esperienzaAccumulata);
+	
 }

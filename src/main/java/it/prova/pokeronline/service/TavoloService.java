@@ -19,6 +19,8 @@ public interface TavoloService {
 	public void rimuovi(Long idToRemove, String username);
 	
 	public List<Tavolo> findByExample(Tavolo example, String username);
+	
+	public List<Tavolo> findAllTavoliPlayable(String username);
 
 	
 }

@@ -139,4 +139,13 @@ public class TavoloServiceImpl implements TavoloService {
 		
 	}
 
+	@Override
+	public List<Tavolo> findAllTavoliPlayable(String username) {
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new NotFoundException("Utente non trovato.");
+		
+		return repository.findAllTavoliPlayable(utenteInSessione.getEsperienzaAccumulata());
+	}
+
 }
