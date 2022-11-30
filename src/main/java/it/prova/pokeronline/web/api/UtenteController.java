@@ -93,5 +93,10 @@ public class UtenteController {
 		Utente utenteAggiornato = utenteService.aggiorna(utenteInput.buildUtenteModel(true));
 		return UtenteDTO.buildUtenteDTOFromModel(utenteAggiornato);
 	}
+	
+	@PostMapping("/search")
+	public List<UtenteDTO> search(@RequestBody UtenteDTO example, Principal principal) {
+		return UtenteDTO.createUtenteDTOListFromModelList(utenteService.findByExample(example.buildUtenteModel(false)));
+	}
 
 }

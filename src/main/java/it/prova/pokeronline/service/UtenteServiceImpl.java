@@ -77,8 +77,7 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Override
 	public List<Utente> findByExample(Utente example) {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findByExample(example);
 	}
 
 	@Override
