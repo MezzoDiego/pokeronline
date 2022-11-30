@@ -148,4 +148,27 @@ public class TavoloServiceImpl implements TavoloService {
 		return repository.findAllTavoliPlayable(utenteInSessione.getEsperienzaAccumulata());
 	}
 
+	@Override
+	@Transactional
+	public void play(Long id, String username) {
+		Tavolo tavoloReloaded = repository.findById(id).orElse(null);
+		if (tavoloReloaded == null)
+			throw new NotFoundException("Tavolo non trovato.");
+		
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new NotFoundException("Utente non trovato.");
+		
+		double segno = Math.random();
+		int somma=(int)Math.random()*1000;
+		int totDaAggiungereOSottrarre = (int) (segno*somma);
+		
+		utenteInSessione.setTavolo(tavoloReloaded);
+		utenteInSessione.setCreditoAccumulato(utenteInSessione.getCreditoAccumulato() + totDaAggiungereOSottrarre);
+		utenteRepository.save(utenteInSessione);
+		tavoloReloaded.getUtenti().add(utenteInSessione);
+		repository.save(tavoloReloaded);
+		
+	}
+
 }

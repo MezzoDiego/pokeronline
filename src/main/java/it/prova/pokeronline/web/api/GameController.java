@@ -44,4 +44,9 @@ public class GameController {
 		return TavoloDTO.createTavoloDTOFromModelList(tavoloService.findAllTavoliPlayable(principal.getName()), false);
 	}
 	
+	@GetMapping("/{id}")
+	public void play(@PathVariable(value= "id",required = true) long idTavolo, Principal principal) {
+		tavoloService.play(idTavolo, principal.getName());
+	}
+	
 }

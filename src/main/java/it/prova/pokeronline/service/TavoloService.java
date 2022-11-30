@@ -21,6 +21,8 @@ public interface TavoloService {
 	public List<Tavolo> findByExample(Tavolo example, String username);
 	
 	public List<Tavolo> findAllTavoliPlayable(String username);
+	
+	public void play(Long id, String username);
 
 	
 }
