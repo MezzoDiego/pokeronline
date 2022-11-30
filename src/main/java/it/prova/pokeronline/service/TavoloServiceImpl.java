@@ -124,4 +124,19 @@ public class TavoloServiceImpl implements TavoloService {
 
 	}
 
+	@Override
+	public List<Tavolo> findByExample(Tavolo example, String username) {
+		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
+		if (utenteInSessione == null)
+			throw new NotFoundException("Utente non trovato.");
+		
+		if(utenteInSessione.isAdmin())
+			return repository.findByExample(example);
+		
+		if(utenteInSessione.isSpecialPlayer())
+			example.setUtenteCreazione(utenteInSessione);
+			return repository.findByExampleEager(example);
+		
+	}
+
 }

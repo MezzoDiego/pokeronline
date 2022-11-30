@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import it.prova.pokeronline.model.Tavolo;
 
-public interface TavoloRepository extends CrudRepository<Tavolo, Long>{
+public interface TavoloRepository extends CrudRepository<Tavolo, Long>, CustomTavoloRepository{
 	@Query("select t from Tavolo t join fetch t.utenteCreazione u where u.id = ?1")
 	List<Tavolo> findAllTavoloEager(Long id);
 	

@@ -17,6 +17,8 @@ public interface TavoloService {
 	public Tavolo inserisciNuovo(Tavolo tavoloInstance, String username);
 
 	public void rimuovi(Long idToRemove, String username);
+	
+	public List<Tavolo> findByExample(Tavolo example, String username);
 
 	
 }
