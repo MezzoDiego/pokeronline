@@ -13,11 +13,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import it.prova.pokeronline.model.Utente;
 
-public class CustomUtenteRepositoryImpl implements CustomUtenteRepository{
+public class CustomUtenteRepositoryImpl implements CustomUtenteRepository {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Override
 	public List<Utente> findByExample(Utente example) {
 		Map<String, Object> paramaterMap = new HashMap<String, Object>();
@@ -57,9 +57,8 @@ public class CustomUtenteRepositoryImpl implements CustomUtenteRepository{
 			whereClauses.add("u.stato = :stato ");
 			paramaterMap.put("stato", example.getStato());
 		}
-		
-		
-		queryBuilder.append(!whereClauses.isEmpty()?" and ":"");
+
+		queryBuilder.append(!whereClauses.isEmpty() ? " and " : "");
 		queryBuilder.append(StringUtils.join(whereClauses, " and "));
 		TypedQuery<Utente> typedQuery = entityManager.createQuery(queryBuilder.toString(), Utente.class);
 

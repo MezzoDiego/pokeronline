@@ -1,23 +1,17 @@
 package it.prova.pokeronline.dto;
 
 import java.time.LocalDate;
-
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import it.prova.pokeronline.model.Ruolo;
 import it.prova.pokeronline.model.StatoUtente;
-import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -53,7 +47,7 @@ public class UtenteDTO {
 	private StatoUtente stato;
 
 	private Long[] ruoliIds;
-	
+
 	public UtenteDTO() {
 	}
 

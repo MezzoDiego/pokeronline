@@ -83,7 +83,8 @@ public class UtenteController {
 	}
 
 	@PutMapping("/{id}")
-	public UtenteDTO update(@Valid @RequestBody UtenteDTOForUpdate utenteInput, @PathVariable(required = true) Long id) {
+	public UtenteDTO update(@Valid @RequestBody UtenteDTOForUpdate utenteInput,
+			@PathVariable(required = true) Long id) {
 		Utente utente = utenteService.caricaSingoloUtente(id);
 
 		if (utente == null)
@@ -93,7 +94,7 @@ public class UtenteController {
 		Utente utenteAggiornato = utenteService.aggiorna(utenteInput.buildUtenteModel(true));
 		return UtenteDTO.buildUtenteDTOFromModel(utenteAggiornato);
 	}
-	
+
 	@PostMapping("/search")
 	public List<UtenteDTO> search(@RequestBody UtenteDTO example, Principal principal) {
 		return UtenteDTO.createUtenteDTOListFromModelList(utenteService.findByExample(example.buildUtenteModel(false)));

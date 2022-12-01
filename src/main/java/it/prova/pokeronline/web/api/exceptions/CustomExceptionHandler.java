@@ -46,10 +46,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
 	}
-	
+
 	@ExceptionHandler(NotFoundException.class)
-	public ResponseEntity<Object> handleNotFoundException(NotFoundException ex,
-			WebRequest request) {
+	public ResponseEntity<Object> handleNotFoundException(NotFoundException ex, WebRequest request) {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
@@ -58,7 +57,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
-	
+
 	@ExceptionHandler(TavoloConGiocatoriException.class)
 	public ResponseEntity<Object> handleTavoloConGiocatoriException(TavoloConGiocatoriException ex,
 			WebRequest request) {
@@ -70,10 +69,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
 	}
-	
+
 	@ExceptionHandler(NotYourTavoloException.class)
-	public ResponseEntity<Object> handleNotYourTavoloException(NotYourTavoloException ex,
-			WebRequest request) {
+	public ResponseEntity<Object> handleNotYourTavoloException(NotYourTavoloException ex, WebRequest request) {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
@@ -82,10 +80,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
 	}
-	
+
 	@ExceptionHandler(NullException.class)
-	public ResponseEntity<Object> handleNullException(NullException ex,
-			WebRequest request) {
+	public ResponseEntity<Object> handleNullException(NullException ex, WebRequest request) {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
@@ -94,10 +91,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
 	}
-	
+
 	@ExceptionHandler(InsufficientFundException.class)
-	public ResponseEntity<Object> handleInsufficientFundException(InsufficientFundException ex,
-			WebRequest request) {
+	public ResponseEntity<Object> handleInsufficientFundException(InsufficientFundException ex, WebRequest request) {
 
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("timestamp", LocalDateTime.now());
@@ -106,7 +102,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
 	}
-	
+
 	@ExceptionHandler(PlayerBusyToAnotherTableException.class)
 	public ResponseEntity<Object> handlePlayerBusyToAnotherTableException(PlayerBusyToAnotherTableException ex,
 			WebRequest request) {
@@ -118,7 +114,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
 	}
-	
+
 	@ExceptionHandler(NotEnoughExperienceException.class)
 	public ResponseEntity<Object> handleNotEnoughExperienceException(NotEnoughExperienceException ex,
 			WebRequest request) {

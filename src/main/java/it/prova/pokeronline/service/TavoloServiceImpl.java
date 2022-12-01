@@ -117,8 +117,8 @@ public class TavoloServiceImpl implements TavoloService {
 		Tavolo tavoloReloaded = repository.findById(idToRemove).orElse(null);
 		if (tavoloReloaded == null)
 			throw new NotFoundException("Tavolo non trovato.");
-		
-		if(tavoloReloaded.getUtenti().size() > 0)
+
+		if (tavoloReloaded.getUtenti().size() > 0)
 			throw new TavoloConGiocatoriException("Impossibile eliminare tavolo, ci stanno giocando dei players.");
 
 		if (utenteInSessione.isAdmin() && tavoloReloaded.getUtenti().size() < 1)
@@ -191,8 +191,8 @@ public class TavoloServiceImpl implements TavoloService {
 
 		if (creditoAggiornato < 0) {
 			utenteInSessione.setCreditoAccumulato(0);
-		utenteRepository.save(utenteInSessione);
-		throw new InsufficientFundException("Credito Esaurito.");
+			utenteRepository.save(utenteInSessione);
+			throw new InsufficientFundException("Credito Esaurito.");
 		}
 
 		utenteInSessione.setCreditoAccumulato(creditoAggiornato);
@@ -232,7 +232,7 @@ public class TavoloServiceImpl implements TavoloService {
 		Utente utenteInSessione = utenteRepository.findByUsername(username).orElse(null);
 		if (utenteInSessione == null)
 			throw new NotFoundException("Utente non trovato.");
-		
+
 		List<Tavolo> tavoliDB = (List<Tavolo>) repository.findAll();
 
 		for (Tavolo tavoloItem : tavoliDB) {

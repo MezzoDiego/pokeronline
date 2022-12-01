@@ -1,7 +1,6 @@
 package it.prova.pokeronline.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,17 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 
 @Entity
 @Table(name = "utente")
@@ -45,7 +40,6 @@ public class Utente {
 	private Integer esperienzaAccumulata;
 	@Column(name = "creditoAccumulato")
 	private Integer creditoAccumulato;
-	
 
 	// se non uso questa annotation viene gestito come un intero
 	@Enumerated(EnumType.STRING)
@@ -54,7 +48,7 @@ public class Utente {
 	@ManyToMany
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
-	
+
 	public Utente() {
 	}
 
@@ -78,9 +72,9 @@ public class Utente {
 		this.email = email;
 		this.stato = stato;
 	}
-	
+
 	public Utente(Long id, String username, String password, String nome, String cognome, String email,
-			 Integer esperienzaAccumulata, Integer creditoAccumulato, LocalDate dateCreated,StatoUtente stato) {
+			Integer esperienzaAccumulata, Integer creditoAccumulato, LocalDate dateCreated, StatoUtente stato) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -93,7 +87,7 @@ public class Utente {
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 	}
-	
+
 	public Utente(Long id, String username, String nome, String cognome, String email) {
 		super();
 		this.id = id;
@@ -166,7 +160,7 @@ public class Utente {
 	public void setStato(StatoUtente stato) {
 		this.stato = stato;
 	}
-	
+
 	public Integer getEsperienzaAccumulata() {
 		return esperienzaAccumulata;
 	}
@@ -190,7 +184,7 @@ public class Utente {
 		}
 		return false;
 	}
-	
+
 	public boolean isSpecialPlayer() {
 		for (Ruolo ruoloItem : ruoli) {
 			if (ruoloItem.getCodice().equals(Ruolo.ROLE_SPECIAL_PLAYER))

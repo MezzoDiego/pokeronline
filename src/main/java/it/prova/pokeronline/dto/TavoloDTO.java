@@ -9,31 +9,29 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
-import net.bytebuddy.asm.Advice.This;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TavoloDTO {
 
 	private Long id;
-	
+
 	@NotNull(message = "{esperienzaAccumulata.notnull}")
-	private Integer esperienzaMinima; 
-	
+	private Integer esperienzaMinima;
+
 	@NotNull(message = "{creditoAccumulato.notnull}")
 	private Integer cifraMinima;
-	
+
 	@NotBlank(message = "{denominazione.notblank}")
 	private String denominazione;
 
 	private LocalDate dataCreazione;
-	
+
 	private Set<Utente> utenti = new HashSet<Utente>(0);
-	
+
 	private UtenteDTO utenteCreazione;
 
 	public TavoloDTO() {
@@ -51,7 +49,7 @@ public class TavoloDTO {
 		this.utenti = utenti;
 		this.utenteCreazione = utenteCreazione;
 	}
-	
+
 	public TavoloDTO(Long id, Integer esperienzaMinima, Integer cifraMinima, String denominazione,
 			LocalDate dataCreazione) {
 		super();
@@ -117,34 +115,32 @@ public class TavoloDTO {
 	public void setUtenteCreazione(UtenteDTO utenteCreazione) {
 		this.utenteCreazione = utenteCreazione;
 	}
-	
+
 	public Tavolo buildTavoloModel() {
-		Tavolo result = new Tavolo(this.id, this.esperienzaMinima, this.cifraMinima, this.denominazione, this.dataCreazione);
-		if(this.utenti.size() > 0)
+		Tavolo result = new Tavolo(this.id, this.esperienzaMinima, this.cifraMinima, this.denominazione,
+				this.dataCreazione);
+		if (this.utenti.size() > 0)
 			result.setUtenti(utenti);
 		return result;
 	}
-	
+
 	public static TavoloDTO buildTavoloDTOFromModel(Tavolo tavoloModel, boolean includeUtente) {
 		TavoloDTO result = new TavoloDTO(tavoloModel.getId(), tavoloModel.getEsperienzaMinima(),
 				tavoloModel.getCifraMinima(), tavoloModel.getDenominazione(), tavoloModel.getDataCreazione());
 
 		if (includeUtente)
-		result.setUtenteCreazione(UtenteDTO.buildUtenteDTOFromModel(tavoloModel.getUtenteCreazione()));
-		
-		if(tavoloModel.getUtenti().size() > 0)
+			result.setUtenteCreazione(UtenteDTO.buildUtenteDTOFromModel(tavoloModel.getUtenteCreazione()));
+
+		if (tavoloModel.getUtenti().size() > 0)
 			result.setUtenti(tavoloModel.getUtenti());
-		
+
 		return result;
 	}
-	
+
 	public static List<TavoloDTO> createTavoloDTOFromModelList(List<Tavolo> modelListInput, boolean includeUtente) {
 		return modelListInput.stream().map(tavoloEntity -> {
 			return TavoloDTO.buildTavoloDTOFromModel(tavoloEntity, includeUtente);
 		}).collect(Collectors.toList());
 	}
 
-
-
-	
 }

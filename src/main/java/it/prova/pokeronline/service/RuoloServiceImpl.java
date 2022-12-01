@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import it.prova.pokeronline.model.Ruolo;
 import it.prova.pokeronline.repository.ruolo.RuoloRepository;
 
-
 @Service
 @Transactional(readOnly = true)
 public class RuoloServiceImpl implements RuoloService {
@@ -33,28 +32,26 @@ public class RuoloServiceImpl implements RuoloService {
 	@Transactional
 	public void aggiorna(Ruolo ruoloInstance) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	@Transactional
 	public void inserisciNuovo(Ruolo ruoloInstance) {
 		ruoloRepository.save(ruoloInstance);
-		
+
 	}
 
 	@Override
 	@Transactional
 	public void rimuovi(Long idToRemove) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public Ruolo cercaPerDescrizioneECodice(String descrizione, String codice) {
 		return ruoloRepository.findByDescrizioneAndCodice(descrizione, codice);
 	}
-
-	
 
 }

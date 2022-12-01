@@ -1,7 +1,6 @@
 package it.prova.pokeronline;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,9 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import it.prova.pokeronline.model.Ruolo;
 import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.service.RuoloService;
-import it.prova.pokeronline.service.TavoloService;
 import it.prova.pokeronline.service.UtenteService;
-
 
 @SpringBootApplication
 public class PokeronlineApplication implements CommandLineRunner {
@@ -22,9 +19,7 @@ public class PokeronlineApplication implements CommandLineRunner {
 	private RuoloService ruoloServiceInstance;
 	@Autowired
 	private UtenteService utenteServiceInstance;
-	@Autowired
-	private TavoloService tavoloServiceInstance;
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(PokeronlineApplication.class, args);
 	}
@@ -38,7 +33,7 @@ public class PokeronlineApplication implements CommandLineRunner {
 		if (ruoloServiceInstance.cercaPerDescrizioneECodice("Player", Ruolo.ROLE_PLAYER) == null) {
 			ruoloServiceInstance.inserisciNuovo(new Ruolo("Player", Ruolo.ROLE_PLAYER));
 		}
-		
+
 		if (ruoloServiceInstance.cercaPerDescrizioneECodice("Special Player", Ruolo.ROLE_SPECIAL_PLAYER) == null) {
 			ruoloServiceInstance.inserisciNuovo(new Ruolo("Special Player", Ruolo.ROLE_SPECIAL_PLAYER));
 		}
@@ -64,14 +59,13 @@ public class PokeronlineApplication implements CommandLineRunner {
 			utenteServiceInstance.inserisciNuovo(specialPlayer);
 			// l'inserimento avviene come created ma io voglio attivarlo
 			utenteServiceInstance.changeUserAbilitation(specialPlayer.getId());
-		
+
 		}
-		
+
 		if (utenteServiceInstance.findByUsername("player") == null) {
 			Utente player = new Utente("player", "player", "Antonioo", "Verdii", LocalDate.now());
 			player.setEmail("p.player@prova.it");
-			player.getRuoli()
-					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Player", Ruolo.ROLE_PLAYER));
+			player.getRuoli().add(ruoloServiceInstance.cercaPerDescrizioneECodice("Player", Ruolo.ROLE_PLAYER));
 			utenteServiceInstance.inserisciNuovo(player);
 			// l'inserimento avviene come created ma io voglio attivarlo
 			utenteServiceInstance.changeUserAbilitation(player.getId());
@@ -80,13 +74,12 @@ public class PokeronlineApplication implements CommandLineRunner {
 		if (utenteServiceInstance.findByUsername("player1") == null) {
 			Utente player1 = new Utente("player1", "player1", "Antoniooo", "Verdiii", LocalDate.now());
 			player1.setEmail("p.player1@prova.it");
-			player1.getRuoli()
-					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Player", Ruolo.ROLE_PLAYER));
+			player1.getRuoli().add(ruoloServiceInstance.cercaPerDescrizioneECodice("Player", Ruolo.ROLE_PLAYER));
 			utenteServiceInstance.inserisciNuovo(player1);
 			// l'inserimento avviene come created ma io voglio attivarlo
 			utenteServiceInstance.changeUserAbilitation(player1.getId());
 		}
-		
+
 	}
 
 }

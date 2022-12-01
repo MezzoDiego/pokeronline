@@ -12,13 +12,12 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 
 import it.prova.pokeronline.model.Tavolo;
-import it.prova.pokeronline.model.Utente;
 
-public class CustomTavoloRepositoryImpl implements CustomTavoloRepository{
+public class CustomTavoloRepositoryImpl implements CustomTavoloRepository {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Override
 	public List<Tavolo> findByExample(Tavolo example) {
 		Map<String, Object> paramaterMap = new HashMap<String, Object>();
@@ -42,8 +41,8 @@ public class CustomTavoloRepositoryImpl implements CustomTavoloRepository{
 			whereClauses.add(" t.esperienzaMinima >= :esperienzaMinima ");
 			paramaterMap.put("esperienzaMinima", example.getEsperienzaMinima());
 		}
-		
-		queryBuilder.append(!whereClauses.isEmpty()?" and ":"");
+
+		queryBuilder.append(!whereClauses.isEmpty() ? " and " : "");
 		queryBuilder.append(StringUtils.join(whereClauses, " and "));
 		TypedQuery<Tavolo> typedQuery = entityManager.createQuery(queryBuilder.toString(), Tavolo.class);
 
@@ -58,7 +57,8 @@ public class CustomTavoloRepositoryImpl implements CustomTavoloRepository{
 		Map<String, Object> paramaterMap = new HashMap<String, Object>();
 		List<String> whereClauses = new ArrayList<String>();
 
-		StringBuilder queryBuilder = new StringBuilder("select distinct t from Tavolo t join fetch t.utenteCreazione u where t.id = t.id ");
+		StringBuilder queryBuilder = new StringBuilder(
+				"select distinct t from Tavolo t join fetch t.utenteCreazione u where t.id = t.id ");
 
 		if (StringUtils.isNotEmpty(example.getDenominazione())) {
 			whereClauses.add(" t.denominazione like :denominazione ");
@@ -80,8 +80,8 @@ public class CustomTavoloRepositoryImpl implements CustomTavoloRepository{
 			whereClauses.add(" u.id = :idUtente ");
 			paramaterMap.put("idUtente", example.getUtenteCreazione().getId());
 		}
-		
-		queryBuilder.append(!whereClauses.isEmpty()?" and ":"");
+
+		queryBuilder.append(!whereClauses.isEmpty() ? " and " : "");
 		queryBuilder.append(StringUtils.join(whereClauses, " and "));
 		TypedQuery<Tavolo> typedQuery = entityManager.createQuery(queryBuilder.toString(), Tavolo.class);
 

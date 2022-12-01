@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ruolo")
 public class Ruolo {
-	
+
 	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 	public static final String ROLE_PLAYER = "ROLE_PLAYER";
 	public static final String ROLE_SPECIAL_PLAYER = "ROLE_SPECIAL_PLAYER";
@@ -26,11 +26,11 @@ public class Ruolo {
 
 	public Ruolo() {
 	}
-	
+
 	public Ruolo(Long id) {
 		this.id = id;
 	}
-	
+
 	public Ruolo(String descrizione) {
 		super();
 		this.descrizione = descrizione;

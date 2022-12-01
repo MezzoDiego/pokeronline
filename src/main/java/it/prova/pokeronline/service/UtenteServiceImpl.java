@@ -1,7 +1,6 @@
 package it.prova.pokeronline.service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +14,15 @@ import it.prova.pokeronline.repository.utente.UtenteRepository;
 import it.prova.pokeronline.web.api.exceptions.NotFoundException;
 import it.prova.pokeronline.web.api.exceptions.NullException;
 
-
 @Service
 @Transactional(readOnly = true)
 public class UtenteServiceImpl implements UtenteService {
 
 	@Autowired
 	private UtenteRepository repository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
 
 	@Override
 	public List<Utente> listAllUtenti() {
@@ -53,7 +50,7 @@ public class UtenteServiceImpl implements UtenteService {
 		utenteReloaded.setEmail(utenteInstance.getEmail());
 		utenteReloaded.setRuoli(utenteInstance.getRuoli());
 		utenteReloaded.setUsername(utenteInstance.getUsername());
-		return repository.save(utenteReloaded);	
+		return repository.save(utenteReloaded);
 	}
 
 	@Override
@@ -65,14 +62,14 @@ public class UtenteServiceImpl implements UtenteService {
 		utenteInstance.setCreditoAccumulato(0);
 		utenteInstance.setEsperienzaAccumulata(0);
 		return repository.save(utenteInstance);
-		
+
 	}
 
 	@Override
 	@Transactional
 	public void rimuovi(Long idToRemove) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -105,7 +102,7 @@ public class UtenteServiceImpl implements UtenteService {
 			utenteInstance.setStato(StatoUtente.DISABILITATO);
 		else if (utenteInstance.getStato().equals(StatoUtente.DISABILITATO))
 			utenteInstance.setStato(StatoUtente.ATTIVO);
-		
+
 	}
 
 	@Override
@@ -119,17 +116,15 @@ public class UtenteServiceImpl implements UtenteService {
 		Utente utenteInSessione = repository.findByUsername(username).orElse(null);
 		if (utenteInSessione == null)
 			throw new NotFoundException("Utente non trovato.");
-		
-		if(moneyToAdd == null)
-			throw new NullException("Il valore da aggiungere al credito non puo' essere null.");
-		
-		Integer creditoAumentato = utenteInSessione.getCreditoAccumulato() + moneyToAdd;
-		
-		utenteInSessione.setCreditoAccumulato(creditoAumentato);
-		 repository.save(utenteInSessione);
-		
-	}
 
-	
+		if (moneyToAdd == null)
+			throw new NullException("Il valore da aggiungere al credito non puo' essere null.");
+
+		Integer creditoAumentato = utenteInSessione.getCreditoAccumulato() + moneyToAdd;
+
+		utenteInSessione.setCreditoAccumulato(creditoAumentato);
+		repository.save(utenteInSessione);
+
+	}
 
 }

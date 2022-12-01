@@ -1,18 +1,12 @@
 package it.prova.pokeronline.dto;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import it.prova.pokeronline.model.Tavolo;
-import it.prova.pokeronline.model.Utente;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TavoloDTOForLastGame {
@@ -39,7 +33,6 @@ public class TavoloDTOForLastGame {
 		this.denominazione = denominazione;
 		this.dataCreazione = dataCreazione;
 	}
-
 
 	public Long getId() {
 		return id;

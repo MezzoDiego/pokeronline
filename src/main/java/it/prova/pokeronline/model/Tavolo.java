@@ -66,7 +66,7 @@ public class Tavolo {
 		this.utenti = utenti;
 		this.utenteCreazione = utenteCreazione;
 	}
-	
+
 	public Tavolo(Long id, Integer esperienzaMinima, Integer cifraMinima, String denominazione,
 			LocalDate dataCreazione) {
 		super();
